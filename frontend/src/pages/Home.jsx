@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import ProductCard from "@/components/ProductCard"
+import RegisterForm from "@/components/RegisterForm";
 
 const Home = () => {
     const [products, setProducts] = useState([])
@@ -15,6 +16,7 @@ const Home = () => {
 
     return (
         <>
+        <RegisterForm/>
         <div className="grid grid-cols-3 gap-10">
             {products.map((product, index) => {
                 return(
