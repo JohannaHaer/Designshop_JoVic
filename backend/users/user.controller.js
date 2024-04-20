@@ -11,7 +11,11 @@ const mult = multer()
 
 router.post('/register', mult.none(), async (req,res) => {
     try {
-        const {username, email, password} = req.body
+        console.log(await req.body);
+        const username = await req.body.username
+        const email = await req.body.email
+        const password = await req.body.password
+        // const {username, email, password} = req.body
         if(!username || !email || !password) {
             res.sendStatus(403)
             return

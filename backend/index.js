@@ -6,6 +6,7 @@ import productRouter from './products/product.controller.js'
 import userRouter from './users/user.controller.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import bodyParser from 'body-parser'
 
 await mongoose.connect(process.env.MONGODB_URI)
 
@@ -19,6 +20,7 @@ const PORT = 3000
 const app = express()
 
 app.use(cors({origin: process.env.CORS_ACCESS, credentials: true}))
+app.use(bodyParser.json())
 app.use(cookieParser())
 app.use('/products', productRouter)
 app.use('/user', userRouter)
