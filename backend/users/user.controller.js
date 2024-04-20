@@ -4,6 +4,7 @@ import { User } from './user.model.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
+import { checkAuth } from './user.middleware.js'
 
 const router = express.Router()
 const mult = multer()
@@ -57,10 +58,40 @@ router.get('/logout', (req, res) => {
     res.end()
 })
 
-router.get('/:username', async (req, res) => {
+router.get('/:username', checkAuth, async (req, res) => {
     const username = req.params.username
     const user = await User.findOne({username}).lean()
     res.json(user)
+})
+
+router.post('/checkUserExist', mult.none(), async (req, res) => {
+    const {username} = req.body
+    try {
+        const user = await User.findOne({username}).lean()
+        if(user) {
+            res.json({checkNameStatus: 'Username already exists'})
+        } else {
+            res.json({checkNameStatus: 'Ok'})
+        }
+    } catch (error) {
+        console.error(error)
+        res.sendStatus(500)
+    }
+})
+
+router.post('/checkEmailExist', mult.none(), async (req, res) => {
+    const {email} = req.body
+    try {
+        const user = await User.findOne({email}).lean()
+        if(user) {
+            res.json({checkEmailStatus: 'Email already exists'})
+        } else {
+            res.json({checkEmailStatus: 'Ok'})
+        }
+    } catch (error) {
+        console.error(error)
+        res.sendStatus(500)
+    }
 })
 
 export default router
